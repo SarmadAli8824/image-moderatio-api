@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Moderation</title>
+</head>
+<body>
+  <h2>Image Moderation Tool</h2>
+  <input type="text" id="token" placeholder="Bearer token"><br><br>
+  <input type="file" id="image"><br><br>
+  <button onclick="upload()">Submit</button>
+  <pre id="response"></pre>
+
+  <script>
+    async function upload() {
+      const token = document.getElementById("token").value;
+      const file = document.getElementById("image").files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("http://localhost:7000/moderate", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + token },
+        body: formData
+      });
+
+      const json = await res.json();
+      document.getElementById("response").innerText = JSON.stringify(json, null, 2);
+    }
+  </script>
+</body>
+</html>
